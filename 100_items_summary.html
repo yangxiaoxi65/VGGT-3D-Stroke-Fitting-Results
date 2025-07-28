@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VGGT 3D Stroke Fitting - Evaluation Results</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+        }
+        .header {
+            background: #f0f0f0;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+            font-weight: normal;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        /* Technical details section */
+        .technical-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .technical-section h2 {
+            margin-top: 0;
+        }
+        .technical-section h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        .technical-section ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        .technical-section li {
+            margin: 5px 0;
+        }
+        .formula {
+            background: #e9ecef;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        /* Statistics Section */
+        .stats-section {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #333;
+            margin: 10px 0;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            /* text-transform: uppercase; */
+            letter-spacing: 1px;
+        }
+        .stat-detail {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+        
+        /* Examples Section */
+        .examples-section {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .dataset {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .dataset h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        /* Visualization grid */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .viz-item {
+            text-align: center;
+        }
+        .viz-item h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .viz-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* Model viewer */
+        model-viewer {
+            width: 100%;
+            height: 250px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            margin: 10px 0;
+        }
+        
+        /* Metrics display */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .metric-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+        }
+        .metric-value {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 0.85em;
+            color: #666;
+            /* text-transform: uppercase; */
+            letter-spacing: 0.5px;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .conclusion-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Metrics mini-table */
+        .metrics-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="font-weight: bold;">VGGT 3D Stroke Fitting Results</h1>
+        <p class="subtitle" style="font-weight: bold;">100 CAD Models Evaluation</p>
+    </div>
+    
+    <div class="container">
+        <!-- Technical Details -->
+        <div class="technical-section">
+            
+            <h3>Pipeline Overview</h3>
+            
+            <!-- Flow diagram -->
+            <div style="text-align: center; margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #e0e0e0; border-radius: 5px;">
+                <span style="display: inline-block; padding: 8px 15px; background: #e8f4f8; border-radius: 5px; margin: 5px;">Step 1: CAD→SVG</span>
+                <span style="color: #666; margin: 0 10px;">→</span>
+                <span style="display: inline-block; padding: 8px 15px; background: #f0e8f8; border-radius: 5px; margin: 5px;">Step 2: SVG→PNG</span>
+                <span style="color: #666; margin: 0 10px;">→</span>
+                <span style="display: inline-block; padding: 8px 15px; background: #e8f8f0; border-radius: 5px; margin: 5px;">Step 3: VGGT</span>
+                <span style="color: #666; margin: 0 10px;">→</span>
+                <span style="display: inline-block; padding: 8px 15px; background: #f8f0e8; border-radius: 5px; margin: 5px;">Step 4: Fitting</span>
+                <span style="color: #666; margin: 0 10px;">→</span>
+                <span style="display: inline-block; padding: 8px 15px; background: #f0f0f8; border-radius: 5px; margin: 5px;">Step 5: Evaluation</span>
+            </div>
+            
+            <!-- Detailed steps -->
+            <div style="margin-top: 20px;">
+                <p><strong>Step 1: CAD to SVG</strong><br>Load Program.json. Project 3D vertices to 2D using perspective projection (distance=30, elevation=30°, azimuth=45°, FOV=50°). Generate SVG with black strokes on white background.</p>
+                
+                <p><strong>Step 2: SVG to PNG</strong><br>Convert SVG to 518×518 PNG using CairoSVG.</p>
+                
+                <p><strong>Step 3: VGGT Inference</strong><br>Feed PNG to VGGT model. Output: depth map and camera pose. Apply scale factor = median (GT depths) / median (VGGT depths).</p>
+                
+                <p><strong>Step 4: 3D Stroke Fitting</strong><br>Extract depths along strokes using Bresenham's algorithm. Convert camera-space depth to model-space z coordinate. Fit linear depth model along each stroke using Huber loss (threshold=1.0).</p>
+                
+                <p><strong>Step 5: Evaluation</strong><br>Compare stroke endpoints. Calculate Mean Z error, Std Z error, Normalized error, Direction error.</p>
+            </div>
+            
+            <h3>Evaluation Metrics</h3>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 12px; text-align: left; width: 30%;">Metric</th>
+                        <th style="padding: 12px; text-align: left; width: 70%;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px; font-weight: bold;">Mean Z Error</td>
+                        <td style="padding: 12px;">
+                            Average depth error for each stroke<br>
+                            <span style="color: #666; font-family: monospace; font-size: 0.9em;">
+                            For each stroke: error = (|z₁_pred - z₁_gt| + |z₂_pred - z₂_gt|) / 2<br>
+                            Mean Z error = average (error) for all strokes
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6; background: #f8f9fa;">
+                        <td style="padding: 12px; font-weight: bold;">Std Z Error</td>
+                        <td style="padding: 12px;">
+                            Standard deviation of Z errors across all strokes<br>
+                            <span style="color: #666; font-family: monospace; font-size: 0.9em;">
+                            Std Z error = std (all stroke errors)
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px; font-weight: bold;">Normalized Error (%)</td>
+                        <td style="padding: 12px;">
+                            Mean Z error normalized by scene depth range<br>
+                            <span style="color: #666; font-family: monospace; font-size: 0.9em;">
+                            Normalized error = Mean Z error / (max_z - min_z) × 100<br>
+                            Used for ranking to ensure fair comparison across different model sizes
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6; background: #f8f9fa;">
+                        <td style="padding: 12px; font-weight: bold;">Direction Error (°)</td>
+                        <td style="padding: 12px;">
+                            Angle between predicted and ground truth stroke directions<br>
+                            <span style="color: #666; font-family: monospace; font-size: 0.9em;">
+                            θ = arccos (dot (normalize (pred_direction), normalize (gt_direction)))<br>
+                            Considers both forward and reverse directions
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dee2e6;">
+                        <td style="padding: 12px; font-weight: bold;">Depth Map MAE</td>
+                        <td style="padding: 12px;">
+                            Mean Absolute Error of VGGT depth prediction at stroke pixels<br>
+                            <span style="color: #666; font-family: monospace; font-size: 0.9em;">
+                            MAE = mean (|depth_pred - depth_gt|) for all pixels covered by strokes<br>
+                            Pixel-level evaluation of raw VGGT output
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Known Limitations</h3>
+            <p><strong>Endpoint Overlap in 2D Projection:</strong> Multiple 3D stroke endpoints may project to the same 2D pixel. Since VGGT predicts one depth value per pixel, endpoints at different depths cannot be distinguished. This primarily affects the 3D stroke reconstruction accuracy.</p>
+        </div>
+        
+        <!-- Overall Statistics -->
+        <div class="stats-section">
+            <h2>Overall Performance Statistics</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">Average across all 100 models</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Mean Z Error</div>
+                    <div class="stat-value">1.738</div>
+                    <div class="stat-detail"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Normalized Error</div>
+                    <div class="stat-value">25.7%</div>
+                    <div class="stat-detail"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Direction Error</div>
+                    <div class="stat-value">12.8°</div>
+                    <div class="stat-detail"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Depth Map MAE</div>
+                    <div class="stat-value">0.917</div>
+                    <div class="stat-detail"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Selected Examples -->
+        <div class="examples-section">
+            <h2>Selected Results</h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                3 best, 3 worst, and 3 median performers from 100 CAD models.
+                Models ranked by normalized error.
+            </p>
+            <p style="margin: 20px 0; font-size: 1.1em;">
+                <a href="stroke_fitting_results.html" target="_blank" style="color: #0066cc; text-decoration: underline; font-weight: 500;">
+                    View complete results for all 100 items
+                </a>
+            </p>
+        </div>
+        
+        <!-- Detailed Examples -->
+
+        <div class="examples-section">
+            <h2>Best Performers (Lowest Normalized Error)</h2>
+
+        <div class="dataset">
+            <h3>CAD Model 22 - Rank #1/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_22/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_22/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_22/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">27</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.521</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.744</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.732</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">8.1%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">13.9°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 3 - Rank #2/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_3/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_3/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_3/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">24</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.243</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.572</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.369</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">8.2%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">6.4°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 35 - Rank #3/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_35/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_35/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_35/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">27</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.723</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.818</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.606</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">8.5%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">5.8°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+</div>
+
+        <div class="examples-section">
+            <h2>Median Performers</h2>
+
+        <div class="dataset">
+            <h3>CAD Model 70 - Rank #50/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_70/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_70/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_70/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">27</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.485</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.387</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.279</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">21.8%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">6.6°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 75 - Rank #51/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_75/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_75/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_75/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">28</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.873</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">2.106</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.689</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">21.9%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">11.0°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 88 - Rank #52/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_88/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_88/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_88/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">18</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.839</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.285</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.382</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">22.0%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">12.0°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+</div>
+
+        <div class="examples-section">
+            <h2>Worst Performers (Highest Normalized Error)</h2>
+
+        <div class="dataset">
+            <h3>CAD Model 5 - Rank #98/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_5/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_5/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_5/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">21</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">2.715</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">6.081</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">3.294</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">65.3%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">22.1°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 56 - Rank #99/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_56/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_56/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_56/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">25</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">0.807</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">2.934</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">2.985</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">78.1%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">17.8°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dataset">
+            <h3>CAD Model 65 - Rank #100/100</h3>
+            
+            <div class="viz-grid">
+                <!-- 2D Input -->
+                <div class="viz-item">
+                    <h3>2D Input Drawing</h3>
+                    <img src="item_65/projection.png" alt="2D projection">
+                </div>
+                
+                <!-- Ground Truth -->
+                <div class="viz-item">
+                    <h3>Ground Truth 3D</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_65/ground_truth.glb" 
+                        alt="Ground truth"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+                
+                <!-- VGGT Result -->
+                <div class="viz-item">
+                    <h3>VGGT Reconstruction</h3>
+                    <model-viewer environment-image="neutral" disable-shadow src="item_65/corrected_3d_strokes.glb" 
+                        alt="VGGT result"
+                        camera-controls>
+                    </model-viewer>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric-item">
+                    <div class="metric-value">40</div>
+                    <div class="metric-label">Num strokes</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">4.244</div>
+                    <div class="metric-label">Depth Map MAE</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">5.063</div>
+                    <div class="metric-label">Mean Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">1.952</div>
+                    <div class="metric-label">Std Z Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">78.4%</div>
+                    <div class="metric-label">Normalized Error</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">25.3°</div>
+                    <div class="metric-label">Direction Error</div>
+                </div>
+            </div>
+        </div>
+</div>
+
+        <!-- End of content -->
+    </div>
+</body>
+</html>

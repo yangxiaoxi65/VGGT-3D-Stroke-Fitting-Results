@@ -1,0 +1,16 @@
+{
+  "num_stroke_pixels": 1810,
+  "num_valid_comparisons": 1397,
+  "mae": 0.6990165467393503,
+  "mean_relative_error_percent": 2.334669842440846,
+  "median_relative_error_percent": 1.2429751258509167,
+  "scale_factor": 29.913285349346395,
+  "vggt_depth_range": [
+    0.8749008774757385,
+    1.1295015811920166
+  ],
+  "gt_depth_range": [
+    25.955751215273892,
+    34.072530858133234
+  ]
+}

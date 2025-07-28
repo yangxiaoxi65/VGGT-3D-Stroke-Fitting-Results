@@ -1,0 +1,8 @@
+{
+  "num_items": 100,
+  "mean_depth_mae": 0.9165503809240755,
+  "mean_relative_error_percent": 3.086758016883249,
+  "mean_z_error": 1.738386878928298,
+  "mean_relative_z_error_percent": 25.733138251079314,
+  "update_note": "Using minimum depth at intersection points"
+}
